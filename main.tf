@@ -11,7 +11,7 @@ resource "kubernetes_namespace" "namespace" {
 
 data "kubernetes_secret" "discord_token" {
   metadata {
-    name = "discord_token"
+    name = "discord-token"
     namespace = kubernetes_namespace.namespace.id
   }
 }
@@ -44,7 +44,7 @@ resource "kubernetes_stateful_set" "discordle" {
           image = "ghcr.io/sodle/discordle:main"
           env_from {
             secret_ref {
-              name = data.kubernetes_secret.discord_token.id
+              name = "discord-token"
             }
           }
         }
