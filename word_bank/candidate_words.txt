@@ -1,4 +1,4 @@
-# The list of all 2315 words that will become the official wordle at some point, shuffled to prevent spoilers
+# The list of all 2315 + 1 words that will become the official wordle at some point, shuffled to prevent spoilers
 scowl
 wager
 tying
@@ -1566,6 +1566,7 @@ dodgy
 break
 three
 proof
+scoot
 humph
 crude
 toddy
