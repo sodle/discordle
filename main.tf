@@ -42,6 +42,7 @@ resource "kubernetes_stateful_set" "discordle" {
         container {
           name = "discordle"
           image = "ghcr.io/sodle/discordle:main"
+          image_pull_policy = "Always"
           env_from {
             secret_ref {
               name = "discord-token"
