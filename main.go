@@ -186,6 +186,11 @@ func main() {
 		return
 	}
 
+	err = discord.UpdateGameStatus(0, "/wordle")
+	if err != nil {
+		fmt.Println("error setting status,", err)
+	}
+
 	wordBank, err := discordle.LoadWordBank("word_bank/candidate_words.txt", "word_bank/valid_guesses.txt")
 	if err != nil {
 		fmt.Println("error loading word bank,", err)
