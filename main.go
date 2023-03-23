@@ -108,13 +108,23 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate, t *discordl
 	if ch.OwnerID == s.State.User.ID {
 		game, err := t.GameForThread(ch.ID)
 		if err != nil {
-			fmt.Println("error getting game for thread,", err)
+			_, err := s.ChannelMessageSend(ch.ID, fmt.Sprintf("Error: %s", err))
+			if err != nil {
+				fmt.Println("error sending response,", err)
+			}
 			return
 		}
 		guess := strings.ToUpper(strings.TrimSpace(m.Content))
+		if !t.WordBank.ValidateGuess(guess) {
+			_, err := s.ChannelMessageSend(ch.ID, "Error: not a valid word")
+			if err != nil {
+				fmt.Println("error sending response,", err)
+			}
+			return
+		}
 		isCorrect, score, err := game.InputGuess(guess)
 		if err != nil {
-			_, err := s.ChannelMessageSend(ch.ID, fmt.Sprintf("Error: %e", err))
+			_, err := s.ChannelMessageSend(ch.ID, fmt.Sprintf("Error: %s", err))
 			if err != nil {
 				fmt.Println("error sending response,", err)
 			}

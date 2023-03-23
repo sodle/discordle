@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"strings"
+	"time"
 )
 
 type WordBank struct {
@@ -32,6 +33,7 @@ func LoadWordBank(candidatePath string, guessPath string) (*WordBank, error) {
 }
 
 func (b *WordBank) GetWord() string {
+	rand.Seed(time.Now().UnixNano())
 	wordCount := len(b.candidateWords)
 	wordIdx := rand.Intn(wordCount)
 	return b.candidateWords[wordIdx]
