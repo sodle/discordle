@@ -106,6 +106,8 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate, t *discordl
 	}
 
 	if ch.OwnerID == s.State.User.ID {
+		fmt.Printf("%s: %s", m.Message.Author.Username, m.Message.Content)
+
 		game, err := t.GameForThread(ch.ID)
 		if err != nil {
 			_, err := s.ChannelMessageSend(ch.ID, fmt.Sprintf("Error: %s", err))
@@ -115,6 +117,13 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate, t *discordl
 			return
 		}
 		guess := strings.ToUpper(strings.TrimSpace(m.Content))
+		if len(guess) != 5 {
+			_, err := s.ChannelMessageSend(ch.ID, "Error: guesses must be 5 letters")
+			if err != nil {
+				fmt.Println("error sending response,", err)
+			}
+			return
+		}
 		if !t.WordBank.ValidateGuess(guess) {
 			_, err := s.ChannelMessageSend(ch.ID, "Error: not a valid word")
 			if err != nil {
@@ -133,6 +142,13 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate, t *discordl
 			_, err := s.ChannelMessageSend(ch.ID, formatWin(game, guess))
 			if err != nil {
 				fmt.Println("error sending response,", err)
+			}
+			archived := true
+			_, err = s.ChannelEdit(ch.ID, &discordgo.ChannelEdit{
+				Archived: &archived,
+			})
+			if err != nil {
+				fmt.Println("error archiving thread,", err)
 			}
 		} else {
 			_, err := s.ChannelMessageSend(ch.ID, formatScore(game, guess, score))
