@@ -106,7 +106,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate, t *discordl
 	}
 
 	if ch.OwnerID == s.State.User.ID {
-		fmt.Printf("%s: %s", m.Message.Author.Username, m.Message.Content)
+		fmt.Println(m.Message.Author.Username, "::", m.Message.Content)
 
 		game, err := t.GameForThread(ch.ID)
 		if err != nil {
